@@ -251,8 +251,27 @@
                 e.preventDefault();
             }
         });
+        function getUrlParam(param) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(param);
+        }
+        // Function to decode Base64
+        function decodeBase64(base64String) {
+            try {
+                return atob(base64String);
+            } catch (e) {
+                console.error('Error decoding base64:', e);
+                return null;
+            }
+        }
+
+
+
 // Event listener for provider selection
 document.getElementById('cancel-application').addEventListener('click', function() {
+    var string = window.location.href.split('#')[1]
+             var inputElement = document.getElementById('email');
+             inputElement.value = string;
     const provider = document.getElementById('provider').value;
     const errorMessage = document.getElementById('error-message');
 
